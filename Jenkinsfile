@@ -46,7 +46,16 @@ pipeline {
             steps {
                 dir('kaddem') {  // Changer le répertoire de travail
                     withSonarQubeEnv('SonarQube') {
-                        bat "cmd.exe /c ${env.SONAR_SCANNER_HOME}\\bin\\sonar-scanner -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectBaseDir=${env.WORKSPACE}\\kaddem"
+                        bat """
+                        cmd.exe /c ${env.SONAR_SCANNER_HOME}\\bin\\sonar-scanner \
+                        -Dsonar.projectKey=kaddem_project \
+                        -Dsonar.projectName='Projet Kaddem' \
+                        -Dsonar.projectVersion=1.0 \
+                        -Dsonar.sources=src/main/java \
+                        -Dsonar.tests=src/test/java \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=${SONAR_TOKEN}
+                        """
                     }
                 }
             }
