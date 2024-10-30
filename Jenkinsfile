@@ -44,23 +44,24 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
-                dir('kaddem') {  // Changer le répertoire de travail
-                    withSonarQubeEnv('SonarQube') {
-                        bat """
-                        cmd.exe /c "${env.SONAR_SCANNER_HOME}\\sonar-scanner.bat" ^
-                        -Dsonar.projectKey=miss_devops ^
-                        -Dsonar.projectName='miss_devops' ^
-                        -Dsonar.projectVersion=1.0 ^
-                        -Dsonar.sources=src/main/java ^
-                        -Dsonar.tests=src/test/java ^
-                        -Dsonar.host.url=http://localhost:9000 ^
-                        -Dsonar.login="${SONAR_TOKEN}"
-                        """
-                    }
-                }
+    steps {
+        dir('kaddem') {  // Changer le répertoire de travail
+            withSonarQubeEnv('SonarQube') {
+                bat """
+                cmd.exe /c "${env.SONAR_SCANNER_HOME}\\sonar-scanner.bat" ^
+                -Dsonar.projectKey=miss_devops ^
+                -Dsonar.projectName=miss_devops ^
+                -Dsonar.projectVersion=1.0 ^
+                -Dsonar.sources=src/main/java ^
+                -Dsonar.tests=src/test/java ^
+                -Dsonar.host.url=http://localhost:9000 ^
+                -Dsonar.login=${SONAR_TOKEN}
+                """
             }
         }
+    }
+}
+
 
         stage('Deploy to Nexus') {
             steps {
