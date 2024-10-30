@@ -24,32 +24,40 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'maven-credentials', usernameVariable: 'MAVEN_USERNAME', passwordVariable: 'MAVEN_PASSWORD')]) {
-                    bat "cmd.exe /c ${env.MAVEN_HOME}\\bin\\mvn clean install -s ${env.WORKSPACE}\\settings.xml -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
+                dir('kaddem') { // Changez de répertoire vers 'kaddem'
+                    withCredentials([usernamePassword(credentialsId: 'maven-credentials', usernameVariable: 'MAVEN_USERNAME', passwordVariable: 'MAVEN_PASSWORD')]) {
+                        bat "cmd.exe /c ${env.MAVEN_HOME}\\bin\\mvn clean install -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
+                    }
                 }
             }
         }
 
         stage('Run Tests') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'maven-credentials', usernameVariable: 'MAVEN_USERNAME', passwordVariable: 'MAVEN_PASSWORD')]) {
-                    bat "cmd.exe /c ${env.MAVEN_HOME}\\bin\\mvn test -s ${env.WORKSPACE}\\settings.xml -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
+                dir('kaddem') { // Changez de répertoire vers 'kaddem'
+                    withCredentials([usernamePassword(credentialsId: 'maven-credentials', usernameVariable: 'MAVEN_USERNAME', passwordVariable: 'MAVEN_PASSWORD')]) {
+                        bat "cmd.exe /c ${env.MAVEN_HOME}\\bin\\mvn test -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
+                    }
                 }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
-                    bat "cmd.exe /c ${env.SONAR_SCANNER_HOME}\\bin\\sonar-scanner -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectBaseDir=${env.WORKSPACE}"
+                dir('kaddem') { // Changez de répertoire vers 'kaddem'
+                    withSonarQubeEnv('SonarQube') {
+                        bat "cmd.exe /c ${env.SONAR_SCANNER_HOME}\\bin\\sonar-scanner -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectBaseDir=${env.WORKSPACE}\\kaddem"
+                    }
                 }
             }
         }
 
         stage('Deploy to Nexus') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'maven-credentials', usernameVariable: 'MAVEN_USERNAME', passwordVariable: 'MAVEN_PASSWORD')]) {
-                    bat "cmd.exe /c ${env.MAVEN_HOME}\\bin\\mvn deploy -s ${env.WORKSPACE}\\settings.xml -DskipTests -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
+                dir('kaddem') { // Changez de répertoire vers 'kaddem'
+                    withCredentials([usernamePassword(credentialsId: 'maven-credentials', usernameVariable: 'MAVEN_USERNAME', passwordVariable: 'MAVEN_PASSWORD')]) {
+                        bat "cmd.exe /c ${env.MAVEN_HOME}\\bin\\mvn deploy -DskipTests -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
+                    }
                 }
             }
         }
