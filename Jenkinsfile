@@ -2,15 +2,22 @@ pipeline {
     agent any
 
     environment {
-        SONAR_TOKEN = credentials('sonar-token')  // Assurez-vous que ce credential est bien configuré dans Jenkins
-        MAVEN_HOME = 'C:\\apache-maven-3.9.9'  // Retirez le '/bin' ici, car nous utiliserons 'mvn' directement
+        SONAR_TOKEN = credentials('sonar-token')  
+        MAVEN_HOME = 'C:\\apache-maven-3.9.9'  
         SONAR_SCANNER_HOME = 'D:\\Haythem\\Telechargements\\Polytec\\ING_IRM_3\\Les fondamentaux du DevOps\\progs\\sonar-scanner-cli-5.0.1.3006-windows'
     }
 
     stages {
         stage('Clone repository') {
             steps {
-                // Utilisez les identifiants pour accéder au dépôt si nécessaire
+                script {
+                    // Vérifiez si la branche spécifiée existe dans le dépôt
+                    def branchExists = sh(script: "git ls-remote --heads https://github.com/HaythemKchouk/Projet_Devops.git branch_haythem", returnStatus: true) == 0
+                    if (!branchExists) {
+                        error "La branche 'branch_haythem' n'existe pas dans le dépôt."
+                    }
+                }
+                // Utilisez les identifiants pour accéder au dépôt
                 git branch: 'branch_haythem', credentialsId: 'github-credentials', url: 'https://github.com/HaythemKchouk/Projet_Devops.git'
             }
         }
