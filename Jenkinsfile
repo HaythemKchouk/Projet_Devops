@@ -48,7 +48,7 @@ pipeline {
                 dir('kaddem') {  // Changer le répertoire de travail
                     withSonarQubeEnv('SonarQube') {
                         bat """
-                        cmd.exe /c "${env.SONAR_SCANNER_HOME}\\bin\\sonar-scanner" ^
+                        cmd.exe /c "${env.SONAR_SCANNER_HOME}\\sonar-scanner" ^
                         -Dsonar.projectKey=kaddem_project ^
                         -Dsonar.projectName='Projet Kaddem' ^
                         -Dsonar.projectVersion=1.0 ^
