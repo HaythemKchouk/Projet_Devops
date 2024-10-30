@@ -11,14 +11,14 @@ pipeline {
         stage('Clone repository') {
             steps {
                 // Utilisez les identifiants pour accéder au dépôt si nécessaire
-                git credentialsId: 'github-credentials', url: 'https://github.com/HaythemKchouk/Projet_Devops.git'
+                git branch: 'branch_haythem', credentialsId: 'github-credentials', url: 'https://github.com/HaythemKchouk/Projet_Devops.git'
             }
         }
 
         stage('Build with Maven') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'maven-credentials', usernameVariable: 'MAVEN_USERNAME', passwordVariable: 'MAVEN_PASSWORD')]) {
-                    sh "${env.MAVEN_HOME}/bin/mvn clean install -s ${env.WORKSPACE}/settings.xml -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
+                    sh "${env.MAVEN_HOME}\\bin\\mvn clean install -s ${env.WORKSPACE}\\settings.xml -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
                 }
             }
         }
@@ -26,7 +26,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'maven-credentials', usernameVariable: 'MAVEN_USERNAME', passwordVariable: 'MAVEN_PASSWORD')]) {
-                    sh "${env.MAVEN_HOME}/bin/mvn test -s ${env.WORKSPACE}/settings.xml -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
+                    sh "${env.MAVEN_HOME}\\bin\\mvn test -s ${env.WORKSPACE}\\settings.xml -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
                 }
             }
         }
@@ -42,7 +42,7 @@ pipeline {
         stage('Deploy to Nexus') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'maven-credentials', usernameVariable: 'MAVEN_USERNAME', passwordVariable: 'MAVEN_PASSWORD')]) {
-                    sh "${env.MAVEN_HOME}/bin/mvn deploy -s ${env.WORKSPACE}/settings.xml -DskipTests -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
+                    sh "${env.MAVEN_HOME}\\bin\\mvn deploy -s ${env.WORKSPACE}\\settings.xml -DskipTests -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
                 }
             }
         }
