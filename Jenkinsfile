@@ -49,8 +49,8 @@ pipeline {
                     withSonarQubeEnv('SonarQube') {
                         bat """
                         cmd.exe /c "${env.SONAR_SCANNER_HOME}\\sonar-scanner" ^
-                        -Dsonar.projectKey=kaddem_project ^
-                        -Dsonar.projectName='Projet Kaddem' ^
+                        -Dsonar.projectKey=miss_devops ^
+                        -Dsonar.projectName='miss_devops' ^
                         -Dsonar.projectVersion=1.0 ^
                         -Dsonar.sources=src/main/java ^
                         -Dsonar.tests=src/test/java ^
