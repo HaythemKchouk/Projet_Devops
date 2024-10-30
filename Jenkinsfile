@@ -4,7 +4,7 @@ pipeline {
     environment {
         SONAR_TOKEN = credentials('sonar-token')  
         MAVEN_HOME = 'C:\\apache-maven-3.9.9'  
-        SONAR_SCANNER_HOME = 'D:\Haythem\Telechargements\Polytec\ING_IRM_3\LesfondamentauxduDevOps\progs\sonar-scanner-5.0.1.3006-windows\bin'
+        SONAR_SCANNER_HOME = 'D:\\Haythem\\Telechargements\\Polytec\\ING_IRM_3\\LesfondamentauxduDevOps\\progs\\sonar-scanner-5.0.1.3006-windows\\bin'
         
     }
 
