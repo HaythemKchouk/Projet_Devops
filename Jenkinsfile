@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     // Vérifiez si la branche spécifiée existe dans le dépôt
-                    def branchExists = bat(script: "git ls-remote --heads https://github.com/HaythemKchouk/Projet_Devops.git branch_haythem", returnStatus: true) == 0
+                    def branchExists = bat(script: "cmd.exe /c git ls-remote --heads https://github.com/HaythemKchouk/Projet_Devops.git branch_haythem", returnStatus: true) == 0
                     if (!branchExists) {
                         error "La branche 'branch_haythem' n'existe pas dans le dépôt."
                     }
@@ -25,7 +25,7 @@ pipeline {
         stage('Build with Maven') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'maven-credentials', usernameVariable: 'MAVEN_USERNAME', passwordVariable: 'MAVEN_PASSWORD')]) {
-                    bat "${env.MAVEN_HOME}\\bin\\mvn clean install -s ${env.WORKSPACE}\\settings.xml -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
+                    bat "cmd.exe /c ${env.MAVEN_HOME}\\bin\\mvn clean install -s ${env.WORKSPACE}\\settings.xml -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
                 }
             }
         }
@@ -33,7 +33,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'maven-credentials', usernameVariable: 'MAVEN_USERNAME', passwordVariable: 'MAVEN_PASSWORD')]) {
-                    bat "${env.MAVEN_HOME}\\bin\\mvn test -s ${env.WORKSPACE}\\settings.xml -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
+                    bat "cmd.exe /c ${env.MAVEN_HOME}\\bin\\mvn test -s ${env.WORKSPACE}\\settings.xml -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
                 }
             }
         }
@@ -41,7 +41,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    bat "${env.SONAR_SCANNER_HOME}\\bin\\sonar-scanner -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectBaseDir=${env.WORKSPACE}"
+                    bat "cmd.exe /c ${env.SONAR_SCANNER_HOME}\\bin\\sonar-scanner -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectBaseDir=${env.WORKSPACE}"
                 }
             }
         }
@@ -49,7 +49,7 @@ pipeline {
         stage('Deploy to Nexus') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'maven-credentials', usernameVariable: 'MAVEN_USERNAME', passwordVariable: 'MAVEN_PASSWORD')]) {
-                    bat "${env.MAVEN_HOME}\\bin\\mvn deploy -s ${env.WORKSPACE}\\settings.xml -DskipTests -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
+                    bat "cmd.exe /c ${env.MAVEN_HOME}\\bin\\mvn deploy -s ${env.WORKSPACE}\\settings.xml -DskipTests -Dusername=${MAVEN_USERNAME} -Dpassword=${MAVEN_PASSWORD}"
                 }
             }
         }
