@@ -54,7 +54,7 @@ pipeline {
                         -Dsonar.sources=src/main/java ^
                         -Dsonar.tests=src/test/java ^
                         -Dsonar.host.url=http://localhost:9000 ^
-                        -Dsonar.login=${SONAR_TOKEN}
+                        -Dsonar.login="${SONAR_TOKEN}"
                         """
                     }
                 }
